@@ -4,38 +4,56 @@ import java.io.*;
 public class Validate {
 
    private String opCode;
-   private String registers;
-   private String[] reg;
-   private Instructions InsTable = new Instructions();
+   private String registers = "";
+   private String[] reg = {};
 
    public Validate(String ins) {
+      opCode = ins.trim();
       if(ins.contains("$")){
-          opCode = ins.substring(0, ins.indexOf("$"));
-          registers = ins.substring(ins.indexOf("$"), ins.length());
+          opCode = ins.substring(0, ins.indexOf("$")).trim();
+          registers = ins.substring(ins.indexOf("$"), ins.length()).trim();
           reg = registers.split(",");
       }
    }
 
-   public int CheckSyntax() {
-
-      //If destination and source are not registers
-      if(!reg[0].contains("$") || !reg[1].contains("$")) {
-         return 0;
+   public boolean CheckSyntax() {
+       if(Instruction.getCode(opCode) == null) {
+         return false;
       }
+      else {
+         Instruction.OpCode o = Instruction.getCode(opCode);
 
-      //Check register
-      if (InsTable.opCodes.get(opCode.trim()) != null) {
-         if (InsTable.opCodes.get(opCode.trim()) & 0x20 == 0x20 && !reg[2].contains("$")) {
-            return 0;
+         //Check if it has enough arguments
+         if(reg.length != o.params) {
+            return false;
          }
-
-      if (InsTable.opCodes.get(opCode.trim()) & 0x08 == 0x08 && Integer.parseInt(reg[2])) {
-            return 0;
+         //If destination and source are not registers
+         else if(o.params >= 2 && (!reg[0].contains("$") || !reg[1].contains("$"))) {
+            return false;
          }
+         //If add, addu, and, or, sltu, sub and the 3rd value is not a register
+         else if ((o == Instruction.OpCode.ADD ||
+                     o == Instruction.OpCode.ADDU ||
+                     o == Instruction.OpCode.AND ||
+                     o == Instruction.OpCode.OR ||
+                     o == Instruction.OpCode.SLTU ||
+                     o == Instruction.OpCode.SUB ) && !reg[2].contains("$"))
+               {
+                  return false;
+               }
+               //If sll, sra, srl, addi, addiu, andi, ori, sltiu, lui
+               else if ((o == Instruction.OpCode.SLL ||
+                         o == Instruction.OpCode.SRA ||
+                         o == Instruction.OpCode.SRL ||
+                         o == Instruction.OpCode.ADDI ||
+                         o == Instruction.OpCode.ADDIU ||
+                         o == Instruction.OpCode.ORI ||
+                         o == Instruction.OpCode.SLTIU ||
+                         o == Instruction.OpCode.LUI)
+                        && reg[o.params - 1].matches("[^0-9]")){
+                  return false;
+               }
       }
-
-      //Check Immediate
-
-      return 1;
+      return true;
    }
 }

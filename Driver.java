@@ -5,13 +5,31 @@ public class Driver {
    public static void main(String[] args){
       File file = new File(args[0]);
       Scanner scanner = null;
+      Integer lineNum = 0;
       Validate validate;
+      Label label = new Label();
 
       try {
          scanner = new Scanner(file);
 
+         //First pass - Checking for labels
+         while(scanner.hasNextLine()) {
+            lineNum++;
+            String line = scanner.nextLine();
+            if(line.contains(":")){
+               String labelName = line.substring(0, line.indexOf(":"));
+               label.addLabel(labelName, lineNum);
+            }
+         }
+
+         System.out.println(label.labelTable);
+
+         //Second pass - Generate object code
+         lineNum = 0;
+         scanner = new Scanner(file);
          //Checking each line
          while(scanner.hasNextLine()){
+            lineNum++;
             String line = scanner.nextLine();
             String command = line;
 
@@ -26,8 +44,11 @@ public class Driver {
             }
 
             if(command.length() > 0){
-               validate = new Validate(command);
                System.out.println("command: " + command);
+               validate = new Validate(command);
+               if(!validate.CheckSyntax()){
+                  System.out.println("Line " + lineNum + ": this instruction is not valid");
+               }
             }
          }
       }catch(FileNotFoundException ex){
