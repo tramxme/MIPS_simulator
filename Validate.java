@@ -49,6 +49,12 @@ public class Validate {
                return false;
             }else{
                immd = Integer.parseInt(reg[o.params-1]);
+
+               //Immediates are limited to 16 bits ( -32768 -> 32767)
+               if(immd < -32768 || immd > 32767){
+                  return false;
+               }
+
             }
                   }
       }
