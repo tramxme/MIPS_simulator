@@ -45,10 +45,11 @@ public class Validate {
          //If sll, sra, srl, addi, addiu, andi, ori, sltiu, lui
          if ((o == Instruction.OpCode.SLL || o == Instruction.OpCode.SRA || o == Instruction.OpCode.SRL || o == Instruction.OpCode.ADDI ||
                   o == Instruction.OpCode.ADDIU || o == Instruction.OpCode.ORI || o == Instruction.OpCode.SLTIU || o == Instruction.OpCode.LUI)){
-            if(!reg[o.params - 1].matches("[-+]?\\d*")){
+            String num = reg[o.params - 1].trim();
+            if(!num.matches("[-+]?\\d*")){
                return false;
             }else{
-               immd = Integer.parseInt(reg[o.params-1]);
+               immd = Integer.parseInt(num);
 
                //Immediates are limited to 16 bits ( -32768 -> 32767)
                if(immd < -32768 || immd > 32767){
