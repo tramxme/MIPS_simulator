@@ -23,7 +23,7 @@ public class Driver {
          }
 
          System.out.println(label.labelTable);
-
+	 System.out.println("hellow Tram");
          //Second pass - Generate object code
          lineNum = 0;
          scanner = new Scanner(file);
