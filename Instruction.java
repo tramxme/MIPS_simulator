@@ -42,16 +42,15 @@ public class Instruction {
          this.name2 = name2;
          this.val = val;
       }
-
-      public static Register getRegister(String name){
-         for(Register reg : Register.values()){
-            if(name.equals(reg.name1) || name.equals(reg.name2)){
-               return reg;
-            }
-         }
-         return null;
-      }
    }
+   public static Register getRegister(String name){
+	   for(Register reg : Register.values()){
+		   if(name.equals(reg.name1) || name.equals(reg.name2)){
+			   return reg;
+		   }
+	   }
+       return null;
+    }
 
    public enum Type {
       RType, IType, JType;
@@ -107,4 +106,5 @@ public class Instruction {
       }
       return null;
    }
+   
 }
