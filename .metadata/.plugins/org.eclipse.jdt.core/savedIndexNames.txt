@@ -1,0 +1,2 @@
+INDEX VERSION 1.127+C:\Users\anthony\Documents\GitHub\MIPS_simulator\.metadata\.plugins\org.eclipse.jdt.core
+68338068.index

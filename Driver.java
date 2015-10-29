@@ -8,7 +8,9 @@ public class Driver {
       Integer lineNum = 0;
       Validate validate;
       Label label = new Label();
-
+      boolean valid = true;
+      ToBin toBin;
+      
       try {
          scanner = new Scanner(file);
 
@@ -23,12 +25,18 @@ public class Driver {
          }
 
          System.out.println(label.labelTable);
-	 System.out.println("hellow Tram");
+
          //Second pass - Generate object code
          lineNum = 0;
          scanner = new Scanner(file);
+         if (args.length > 1){
+        	 toBin = new ToBin(args[1]);
+         }
+         else {
+        	 toBin = new ToBin();
+         }
          //Checking each line
-         while(scanner.hasNextLine()){
+         while(scanner.hasNextLine()&& valid){
             lineNum++;
             String line = scanner.nextLine();
             String command = line;
@@ -46,11 +54,15 @@ public class Driver {
             if(command.length() > 0){
                System.out.println("command: " + command);
                validate = new Validate(command);
-               if(!validate.CheckSyntax()){
+               if(!(valid = validate.CheckSyntax())){
                   System.out.println("Line " + lineNum + ": this instruction is not valid");
+               }
+               else{
+            	   toBin.writeToBin(command);
                }
             }
          }
+         toBin.closeFile(valid);
       }catch(FileNotFoundException ex){
         System.out.println("File not found");
       }
