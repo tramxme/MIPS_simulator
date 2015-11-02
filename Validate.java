@@ -46,6 +46,10 @@ public class Validate {
          if ((o == Instruction.OpCode.SLL || o == Instruction.OpCode.SRA || o == Instruction.OpCode.SRL || o == Instruction.OpCode.ADDI ||
                   o == Instruction.OpCode.ADDIU || o == Instruction.OpCode.ORI || o == Instruction.OpCode.SLTIU || o == Instruction.OpCode.LUI)){
             String num = reg[o.params - 1].trim();
+
+            //TODO: match hex value and range and return immd in integer format.Do try and catch loop
+            //TODO: lw
+
             if(!num.matches("[-+]?\\d*")){
                return false;
             }else{
@@ -55,7 +59,6 @@ public class Validate {
                if(immd < -32768 || immd > 32767){
                   return false;
                }
-
             }
                   }
       }
