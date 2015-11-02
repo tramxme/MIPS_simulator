@@ -9,7 +9,9 @@ ADD:     addi $t1, $t1, 1            #t1 += 5
          addi $v0, $zero, 4 #print t1
          add $a0, $zero, $t1
          syscall
-
+	 sw $a2, $t0, 37
          addi $v0, $zero, 10 #terminate the program
          syscall
 
+stored: .word 15
+hexstored: .word 0x31
