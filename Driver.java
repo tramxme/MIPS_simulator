@@ -20,7 +20,7 @@ public class Driver {
             String line = scanner.nextLine();
             if(line.contains(":")){
                String labelName = line.substring(0, line.indexOf(":"));
-               label.addLabel(labelName, lineNum);
+               label.addLabel(labelName, lineNum * 4);
             }
          }
 
