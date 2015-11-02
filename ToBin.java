@@ -48,7 +48,7 @@ public class ToBin {
 	// this does the real work pulling apart the instruction translates to bin data and saves
 	public void writeToBin(String ins){
 		int bytes = 0;
-		Instruction.OpCode o;
+		Instruction.OpCode o = null;
 		Instruction.Register r;
 		String opCode = ins.trim();
 		String registers = "";
@@ -62,10 +62,33 @@ public class ToBin {
 		    reg = registers.split(",");
 		    for (int i = 0; i < reg.length; i++){
 		    	reg[i] = reg[i].trim();
-		    }
+		    }   
+	    }
+	    else if (ins.contains(".byte") || ins.contains(".word")){
+	    	ins.trim();
+	    	  reg = ins.split("\\s+");
+	    	  opCode = reg[1];
+	    	  opCode.trim();
+	    	  
+	    	  registers = reg[2];
+	    	  registers.trim();
 	    }
 	    o = Instruction.getCode(opCode);
+	    if(opCode.equals(".byte") || opCode.equals(".word")){
+   		 try{
+   			 bytes = Integer.parseInt(registers);
+   			 o = null;
+   		 }
+   		 catch(Exception e){
+   			 if(registers.contains("0x")){
+   				 registers = registers.replace("0x","");
+   				 bytes = Integer.parseInt(registers, 16);
+   				 o = null;
+   			 } 
+   		 }
+   	 	}
 	    
+	    if (o != null){
 	    if ((o == Instruction.OpCode.SLL || o == Instruction.OpCode.SRA || o == Instruction.OpCode.SRL || o == Instruction.OpCode.ADDI ||
          o == Instruction.OpCode.ADDIU || o == Instruction.OpCode.ORI || o == Instruction.OpCode.SLTIU || o == Instruction.OpCode.LUI)){
 	    	String num = reg[o.params - 1].trim();
@@ -95,6 +118,7 @@ public class ToBin {
 	    		bytes |= r.val << (21 - 5 * i);
 	    	}
 	    }
+	    }
 	    for (int i = 0; i < 4; i++){
 	    	try {
 				out.write(bytes >>> (24 - i * 8));
@@ -104,7 +128,7 @@ public class ToBin {
 			}
 	    }
 	    Integer binCom = bytes;
-	    System.out.println("binary output: " + String.format("%32s",(Integer.toBinaryString(binCom))).replace(" ","0") + "\n");
+	    System.out.println("binary output: " + String.format("%8s",(Integer.toHexString(binCom))).replace(" ","0") + "\n");
 	}
 	public void closeFile (boolean valid){
 		try {
