@@ -17,47 +17,45 @@ public class Validate {
          reg = registers.split(",");
       }
       else if (ins.contains(".byte") || ins.contains(".word")){
-    	  ins.trim();
-    	  reg = ins.split("\\s+");
-    	  opCode = reg[1];
-    	  opCode.trim();
-    	  
-    	  registers = reg[2];
-    	  registers.trim();
-    	  
+         ins.trim();
+         reg = ins.split("\\s+");
+         opCode = reg[1];
+         opCode.trim();
+
+         registers = reg[2];
+         registers.trim();
+
       }
    }
 
    public boolean CheckSyntax() {
-	   System.out.println(opCode);
-	   if(opCode.equals(".byte") || opCode.equals(".word")){
-  		 System.out.println(opCode);
-  		 try{
-  			 immd = Integer.parseInt(registers);
-  			 return true;
-  		 }
-  		 catch(Exception e){
-  			 if(registers.contains("0x")){
-  				 registers = registers.replace("0x","");
-  				 System.out.println(registers);
-  				 try{
-  					 immd = Integer.parseInt(registers, 16);
-  					 return true;
-  				 }catch(Exception f){
-  					 return false;
-  				 }
-  			 }
-  			 else {
-  				 return false;
-  			 }
-  		 }
-  	 }
-	   if(Instruction.getCode(opCode) == null) {
+      System.out.println(opCode);
+      if(opCode.equals(".byte") || opCode.equals(".word")){
+         System.out.println(opCode);
+         try{
+            immd = Integer.parseInt(registers);
+            return true;
+         }
+         catch(Exception e){
+            if(registers.contains("0x")){
+               registers = registers.replace("0x","");
+               System.out.println(registers);
+               try{
+                  immd = Integer.parseInt(registers, 16);
+                  return true;
+               }catch(Exception f){
+                  return false;
+               }
+            }
+            else {
+               return false;
+            }
+         }
+      }
+      if(Instruction.getCode(opCode) == null) {
          return false;
       }
       else {
-    	 
-    	 
          o = Instruction.getCode(opCode);
 
          //Check if it has enough arguments
@@ -77,52 +75,41 @@ public class Validate {
             return false;
          }
 
-         //If sll, sra, srl, addi, addiu, andi, ori, sltiu, lui
          if (o.type == Instruction.Type.IType){
-            String num = reg[o.params - 1].trim();
-<<<<<<< HEAD
+            //lw
+            if (o == Instruction.OpCode.LW) {
 
-            //TODO: match hex value and range and return immd in integer format.Do try and catch loop
-            //TODO: lw
-
-            if(!num.matches("[-+]?\\d*")){
-               return false;
-            }else{
-               immd = Integer.parseInt(num);
+            }
+            //If sll, sra, srl, addi, addiu, andi, ori, sltiu, lui
+            else {
+               String num = reg[o.params - 1].trim();
+               try {
+                  immd = Integer.parseInt(num);
+               }
+               catch(Exception e) {
+                  if(registers.contains("0x")){
+                     registers = registers.replace("0x","");
+                     try {
+                        immd = Integer.parseInt(registers, 16);
+                     }
+                     catch (Exception f){
+                        return false;
+                     }
+                  }
+                  else {
+                     try {
+                        immd = Label.labelTable.get(num);
+                     }
+                     catch (Exception g){
+                        return false;
+                     }
+                  }
+               }
 
                //Immediates are limited to 16 bits ( -32768 -> 32767)
                if(immd < -32768 || immd > 32767){
                   return false;
                }
-=======
-            System.out.println(num);
-            try {
-	    		immd = Integer.parseInt(num);
-		    }
-		    catch(Exception e) {
-		    	if(registers.contains("0x")){
-	   				 registers = registers.replace("0x","");
-	   				 try {
-	   					 immd = Integer.parseInt(registers, 16);
-	   				 }
-	   				 catch (Exception f){
-	   					 return false;
-	   				 }
-		    	}
-		    	else {
-		    		try {
-		    			immd = Label.labelTable.get(num);
-		    		}
-		    		catch (Exception g){
-		    			return false;
-		    		}
-		    	}
-		    }
-            
-            //Immediates are limited to 16 bits ( -32768 -> 32767)
-            if(immd < -32768 || immd > 32767){
-                 return false;
->>>>>>> e45b0487fbc978a6923e1a6216c5025868350175
             }
          }
       }

@@ -44,13 +44,13 @@ public class Instruction {
       }
    }
    public static Register getRegister(String name){
-	   for(Register reg : Register.values()){
-		   if(name.equals(reg.name1) || name.equals(reg.name2)){
-			   return reg;
-		   }
-	   }
-       return null;
-    }
+      for(Register reg : Register.values()){
+         if(name.equals(reg.name1) || name.equals(reg.name2)){
+            return reg;
+         }
+      }
+      return null;
+   }
 
    public enum Type {
       RType, IType, JType;
@@ -85,8 +85,8 @@ public class Instruction {
       //JType
       JAL ("jal", Type.JType, 0x03, 1),
       J ("j", Type.JType, 0x02, 1),
-	  WORD (".word",Type.JType, 0x00, 1),
-	  BYTE (".byte", Type.JType, 0x00, 1);
+      WORD (".word",Type.JType, 0x00, 1),
+      BYTE (".byte", Type.JType, 0x00, 1);
 
       public final String name;
       public final Type type;

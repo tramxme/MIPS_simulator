@@ -24,16 +24,17 @@ public class Driver {
             }
          }
 
+         //Print out the label Table with their line number * 4
          System.out.println(label.labelTable);
 
          //Second pass - Generate object code
          lineNum = 0;
          scanner = new Scanner(file);
          if (args.length > 1){
-        	 toBin = new ToBin(args[1]);
+            toBin = new ToBin(args[1]);
          }
          else {
-        	 toBin = new ToBin();
+            toBin = new ToBin();
          }
          //Checking each line
          while(scanner.hasNextLine()&& valid){
@@ -45,10 +46,10 @@ public class Driver {
                command = line.substring(line.indexOf(":") + 1, line.indexOf("#"));
             }
             else if(line.contains("#")) {
-                command = line.substring(0, line.indexOf("#"));
+               command = line.substring(0, line.indexOf("#"));
             }
             else if(line.contains(":")){
-                command = line.substring(line.indexOf(":") + 1, line.length());
+               command = line.substring(line.indexOf(":") + 1, line.length());
             }
 
             if(command.length() > 0){
@@ -58,13 +59,13 @@ public class Driver {
                   System.out.println("Line " + lineNum + ": this instruction is not valid");
                }
                else{
-            	   toBin.writeToBin(command);
+                  toBin.writeToBin(command);
                }
             }
          }
          toBin.closeFile(valid);
       }catch(FileNotFoundException ex){
-        System.out.println("File not found");
+         System.out.println("File not found");
       }
 
    }

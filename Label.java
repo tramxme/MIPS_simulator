@@ -8,5 +8,4 @@ public class Label {
    public void addLabel(String name, Integer lineNum) {
       labelTable.put(name, lineNum);
    }
-   
 }
