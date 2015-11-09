@@ -10,18 +10,19 @@ public class Driver {
       Label label = new Label();
       boolean valid = true;
       ToBin toBin;
+      Memory memory;
 
       try {
          scanner = new Scanner(file);
 
          //First pass - Checking for labels
          while(scanner.hasNextLine()) {
-            lineNum++;
             String line = scanner.nextLine();
             if(line.contains(":")){
                String labelName = line.substring(0, line.indexOf(":"));
                label.addLabel(labelName, lineNum * 4);
             }
+            lineNum++;
          }
 
          //Print out the label Table with their line number * 4
@@ -64,6 +65,14 @@ public class Driver {
             }
          }
          toBin.closeFile(valid);
+
+         //Get the memory with all the instructions
+         //Print the instructions in binary
+         memory = toBin.getMemory();
+         for (Integer i : memory.Instructions) {
+            System.out.printf("%X\n", i);
+
+         }
       }catch(FileNotFoundException ex){
          System.out.println("File not found");
       }

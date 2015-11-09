@@ -1,7 +1,6 @@
 # This test driver just loads a 32-bit word to get it's bits counted
 
-main:
-   lw	$a0, test1	# Here is the test value
+main:  lw	$a0, test1	# Here is the test value
 
    jal	countbits	# Go count the bits in $a0
 

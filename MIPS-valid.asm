@@ -9,7 +9,7 @@ ADD:     addi $t1, $t1, 1            #t1 += 5
          addi $v0, $zero, 4 #print t1
          add $a0, $zero, $t1
          syscall
-	 sw $a2, $t0, 37
+	 sw $a2, 4($t0)
          addi $v0, $zero, 10 #terminate the program
          syscall
 

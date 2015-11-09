@@ -12,9 +12,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 
-
 public class ToBin {
    private OutputStream out = null;
+   public Memory memory = new Memory();
 
    private String filePath;
    // constructor with given path
@@ -64,7 +64,7 @@ public class ToBin {
             reg[i] = reg[i].trim();
          }
       }
-      else if (ins.contains(".byte") || ins.contains(".word")){
+      else if (ins.contains(".byte") || ins.contains(".word") || ins.contains(" jal ") || ins.contains(" j ")){
          ins.trim();
          reg = ins.split("\\s+");
          opCode = reg[1];
@@ -73,6 +73,7 @@ public class ToBin {
          registers = reg[2];
          registers.trim();
       }
+
       o = Instruction.getCode(opCode);
       if(opCode.equals(".byte") || opCode.equals(".word")){
          try{
@@ -87,6 +88,7 @@ public class ToBin {
             }
          }
       }
+
 
       if (o != null){
          if ((o == Instruction.OpCode.SLL || o == Instruction.OpCode.SRA || o == Instruction.OpCode.SRL || o == Instruction.OpCode.ADDI ||
@@ -112,13 +114,49 @@ public class ToBin {
             bytes |= o.hex << 26;
             bytes |= immd & 0xFFFF;
          }
+
          for(int i = 0; i < reg.length; i++){
             r = Instruction.getRegister(reg[i]);
             if (r != null){
                bytes |= r.val << (21 - 5 * i);
             }
          }
+
+         //In the case of LW and SW
+         if (o == Instruction.OpCode.LW || o == Instruction.OpCode.SW) {
+            String[] params = registers.split(",");
+
+            //If it's a label, it should be preceeded by a lui command
+            if (!params[1].contains("$") && Label.labelTable.containsKey(params[1].trim())){
+               o = Instruction.OpCode.LUI;
+               bytes = o.hex << 26;
+               bytes |= 1 << 16;
+               bytes |= (Label.labelTable.get(params[1].trim()) >> 16) & 0x0000FFFF;
+               System.out.printf("binary output: 0x%8X\n\n", bytes);
+               memory.addInstruction(bytes);
+            }
+
+            bytes = 0;
+            bytes |= o.hex << 26;
+            String rt = params[0];
+            r = Instruction.getRegister(rt);
+            String[] temp = params[1].split("(");
+            Integer offset = 0;
+            if (temp[0].trim().length() > 0) {
+               offset = Integer.parseInt(temp[0].trim());
+            }
+            else {
+            }
+            String rs = temp[1].trim();
+         }
+         //In the case of J and JAL
+         if (o == Instruction.OpCode.JAL || o == Instruction.OpCode.J) {
+
+         }
       }
+
+      System.out.printf("binary output: 0x%8X\n\n", bytes);
+      memory.addInstruction(bytes);
       for (int i = 0; i < 4; i++){
          try {
             out.write(bytes >>> (24 - i * 8));
@@ -127,9 +165,11 @@ public class ToBin {
             e.printStackTrace();
          }
       }
-      Integer binCom = bytes;
-      System.out.println("binary output: " + String.format("%8s",(Integer.toHexString(binCom))).replace(" ","0") + "\n");
+
+      //Integer binCom = bytes;
+      //System.out.println("binary output: " + String.format("%8s",(Integer.toHexString(binCom))).replace(" ","0") + "\n");
    }
+
    public void closeFile (boolean valid){
       try {
          out.close();
@@ -146,5 +186,9 @@ public class ToBin {
             f.delete();
          }
       }
+   }
+
+   public Memory getMemory() {
+      return memory;
    }
 }
