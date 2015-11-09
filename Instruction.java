@@ -76,7 +76,7 @@ public class Instruction {
       ANDI ("andi", Type.IType, 0x0C, 3),
       BEQ ("beq", Type.IType, 0x04, 3),
       BNE ("bne", Type.IType, 0x05, 3),
-      LW ("lw", Type.IType, 0x23, 3),
+      LW ("lw", Type.IType, 0x23, 2),
       ORI ("ori", Type.IType, 0x0D, 3),
       SLTIU ("sltiu", Type.IType, 0x0B, 3),
       SW ("sw", Type.IType, 0x2B, 3),
