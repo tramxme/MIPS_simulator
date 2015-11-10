@@ -37,7 +37,9 @@ public class Memory {
    public static int getCurrentDataAddr(){
       return dataAddress;
    }
+
    public static int getlastPC(){
+      lastPC = address - 4;
       return lastPC;
    }
 

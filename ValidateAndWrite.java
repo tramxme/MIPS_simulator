@@ -37,7 +37,7 @@ public class ValidateAndWrite{
          try{
             immd = Integer.parseInt(value);
             mem.addInstruction(immd, lineNum);
-            System.out.printf("bytes 0x%8X\n", bytes);
+            //System.out.printf("bytes 0x%8X\n", bytes);
             out.write(bytes);
             return true;
          }
@@ -47,7 +47,7 @@ public class ValidateAndWrite{
                try{
                   immd = Integer.parseInt(value, 16);
                   mem.addInstruction(immd, lineNum);
-                  System.out.printf("bytes 0x%8X\n", bytes);
+                  //System.out.printf("bytes 0x%8X\n", bytes);
                   out.write(bytes);
                   return true;
                }catch(Exception f){
@@ -96,7 +96,7 @@ public class ValidateAndWrite{
                bytes |= rd.val << 11;
                bytes |= Instruction.OpCode.ADDU.hex;
                mem.addInstruction(bytes, lineNum);
-               System.out.printf("bytes 0x%8X\n", bytes);
+               //System.out.printf("bytes 0x%8X\n", bytes);
                try {
                   out.write(bytes);
                }
@@ -113,12 +113,12 @@ public class ValidateAndWrite{
                   //Get the address of the label
                   address = Label.getAddress(label);
                   int offset = address - lineNum;
-                  System.out.printf("jump to : " + (offset * 4 + Memory.getCurrentPC()));
+                  //System.out.printf("jump to : " + (offset * 4 + Memory.getCurrentPC()));
 
                   bytes = o.hex << 26;
                   bytes |= (0x03FFFFFF & (offset * 4 + Memory.getCurrentPC()));
                   mem.addInstruction(bytes, lineNum);
-                  System.out.printf("bytes 0x%8X\n", bytes);
+                  //System.out.printf("bytes 0x%8X\n", bytes);
                   try {
                      out.write(bytes);
                      return true;
@@ -172,7 +172,7 @@ public class ValidateAndWrite{
                         bytes |= immd;
 
                         mem.addInstruction(bytes, lineNum);
-                        System.out.printf("bytes 0x%8X\n", bytes);
+                        //System.out.printf("bytes 0x%8X\n", bytes);
                         try {
                            out.write(bytes);
                         }
@@ -183,7 +183,7 @@ public class ValidateAndWrite{
                         bytes |= Instruction.Register.at.val << 21;
                         bytes |= rt.val << 16;
                         mem.addInstruction(bytes, lineNum);
-                        System.out.printf("bytes 0x%8X\n", bytes);
+                        //System.out.printf("bytes 0x%8X\n", bytes);
 
                         try {
                            out.write(bytes);
@@ -212,7 +212,7 @@ public class ValidateAndWrite{
                      bytes |= rt.val << 16;
                      bytes |= (0xFFFF & immd);
                      mem.addInstruction(bytes, lineNum);
-                     System.out.printf("bytes 0x%8X\n", bytes);
+                     //System.out.printf("bytes 0x%8X\n", bytes);
                      try {
                         out.write(bytes);
                      }
@@ -227,7 +227,7 @@ public class ValidateAndWrite{
             case "syscall":
                bytes = o.hex;
                mem.addInstruction(bytes, lineNum);
-               System.out.printf("bytes 0x%8X\n", bytes);
+               //System.out.printf("bytes 0x%8X\n", bytes);
                try {
                   out.write(bytes);
                }
@@ -250,7 +250,7 @@ public class ValidateAndWrite{
                bytes |= rd.val << 11;
                bytes |= o.hex;
                mem.addInstruction(bytes, lineNum);
-               System.out.printf("bytes 0x%8X\n", bytes);
+               //System.out.printf("bytes 0x%8X\n", bytes);
                try {
                   out.write(bytes);
                }
@@ -278,7 +278,7 @@ public class ValidateAndWrite{
                bytes |= o.hex;
 
                mem.addInstruction(bytes, lineNum);
-               System.out.printf("bytes 0x%8X\n", bytes);
+               //System.out.printf("bytes 0x%8X\n", bytes);
                try {
                   out.write(bytes);
                }
@@ -318,7 +318,7 @@ public class ValidateAndWrite{
                bytes |= (0xFFFF & immd);
 
                mem.addInstruction(bytes, lineNum);
-               System.out.printf("bytes 0x%8X\n", bytes);
+               //System.out.printf("bytes 0x%8X\n", bytes);
                try {
                   out.write(bytes);
                }
@@ -351,7 +351,7 @@ public class ValidateAndWrite{
                bytes |= (0xFFFF & (address - lineNum - 1));
 
                mem.addInstruction(bytes, lineNum);
-               System.out.printf("bytes 0x%8X\n", bytes);
+               //System.out.printf("bytes 0x%8X\n", bytes);
                try {
                   out.write(bytes);
                }
@@ -367,7 +367,7 @@ public class ValidateAndWrite{
                bytes |= o.hex;
 
                mem.addInstruction(bytes, lineNum);
-               System.out.printf("bytes 0x%8X\n", bytes);
+               //System.out.printf("bytes 0x%8X\n", bytes);
                try {
                   out.write(bytes);
                }
@@ -388,7 +388,7 @@ public class ValidateAndWrite{
          e.printStackTrace();
       }
       if (valid){
-         System.out.println(filePath + " Binary File Written\n");
+         //System.out.println(filePath + " Binary File Written\n");
       }
       else {
          File f = new File(filePath);

@@ -115,8 +115,9 @@ public class Driver {
             System.out.printf("%d - instruction 0x%8X\n", j++, i);
             }
             */
+         System.out.println("Text Segment: " );
          for(Map.Entry<Integer, Integer> s : Memory.Instructions.entrySet()) {
-            System.out.printf("line %d - Address 0x%8x - instruction 0x%8X\n", s.getKey(), s.getKey(), s.getValue());
+            System.out.printf("Address 0x%8x - instruction 0x%8X\n", s.getKey(), s.getValue());
          }
 
          Simulator s = new Simulator();
