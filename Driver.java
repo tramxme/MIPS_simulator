@@ -9,7 +9,6 @@ public class Driver {
       ValidateAndWrite vaw = new ValidateAndWrite();
       Label label;
       boolean valid = true;
-      ToBin toBin;
 
       try {
          scanner = new Scanner(file);
