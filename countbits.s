@@ -8,7 +8,7 @@ main:  lw	$a0, test1	# Here is the test value
    ori	$v0, $zero, 10	# TRAP HALT; whose bright idea was it to pass codes
    syscall			# in the $v registers?
 
-# countbits.s - This function counts the number of '1' bits in a 32 bit word.
+# countbits.s - This function counts the number of '1' bitsquit in a 32 bit word.
 # It simply returns the number of 1's found.
 
 # Count bits in $a0, returning $v0 as the count

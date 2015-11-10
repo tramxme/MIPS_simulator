@@ -13,26 +13,39 @@ public class Memory {
    */
 
    public static Map<Integer, Integer> Instructions = new TreeMap<Integer, Integer>();
+   public static Map<Integer, Integer> Data = new TreeMap<Integer, Integer>();
+
    public static int address = 0x00400000;
    public static int lastPC = 0x00400000;
+   public static int dataAddress = 0x10010000;
+   public static int firstData;
 
-   public void addInstruction(Integer instruction, int lineNum, boolean data) {
+   public void addInstruction(Integer instruction, int lineNum) {
       Instructions.put(address, instruction);
-      if (data){
-         lastPC = address - 4;
-      }
       address += 4;
+   }
+
+   public void addData(Integer data, int lineNum) {
+      Instructions.put(dataAddress, data);
+      dataAddress += 4;
    }
 
    public static int getCurrentPC(){
       return address;
    }
 
+   public static int getCurrentDataAddr(){
+      return dataAddress;
+   }
    public static int getlastPC(){
       return lastPC;
    }
 
    public static Integer getInstruction(int PC) {
       return Instructions.get(PC);
+   }
+
+   public void setFirstData(int lineNum){
+      firstData = lineNum;
    }
 }

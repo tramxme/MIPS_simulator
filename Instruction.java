@@ -60,7 +60,7 @@ public class Instruction {
       //RType
       ADD ("add", Type.RType, 0x20, 3),
       ADDU ("addu", Type.RType, 0x21, 3),
-      AND ("and", Type.RType, 0x21, 3),
+      AND ("and", Type.RType, 0x24, 3),
       JR ("jr", Type.RType, 0x08, 1),
       OR ("or", Type.RType, 0x25, 3),
       SLL ("sll", Type.RType, 0x00, 3),

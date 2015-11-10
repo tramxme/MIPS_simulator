@@ -6,10 +6,12 @@ public class Driver {
       File file = new File(args[0]);
       Scanner scanner = null;
       int lineNum = 0, InsNum = 0;
-      ValidateAndWrite vaw = new ValidateAndWrite();
+      ValidateAndWrite vaw;
       Label label;
       boolean valid = true;
-      ToBin toBin;
+      Memory mem = new Memory();
+      boolean getData = false;
+      boolean firstData = false;
 
       try {
          scanner = new Scanner(file);
@@ -20,25 +22,54 @@ public class Driver {
             //Remove leading and ending spaces
             line = line.replaceAll("^\\s+|\\s+$","");
 
+            //Strip comment
             if(line.contains("#")){
                line = line.replace(line.substring(line.indexOf("#"), line.length()), "");
             }
 
             //Only count line with either label or command
             if(line.length() > 0) {
+               if(line.contains(".data")){
+                  getData = true;
+               }
+
                if(line.contains(":")){
                   String labelName = line.substring(0, line.indexOf(":"));
                   label = new Label(labelName, lineNum);
+
+                  if(getData && (line.contains(".word") || line.contains(".bytes"))){
+                     if(!firstData) {
+                        mem.setFirstData(lineNum);
+                        firstData = true;
+                     }
+
+                     String[] params = line.split("\\s+");
+                     String val = params[2].trim();
+                     int data = 0;
+                     if(val.contains("0x")){
+                        val = val.replace("0x", "");
+                        data = Integer.parseInt(val, 16);
+                     }
+                     else {
+                        data = Integer.parseInt(val);
+                     }
+                     mem.addData(data, lineNum);
+                  }
                }
-               lineNum++;
             }
 
+            String temp = line.replace(line.substring(0,line.indexOf(":") + 1), "");
+            temp = temp.replaceAll("^\\s+|\\s+$", "");
+            if(temp.length() > 0) {
+               lineNum++;
+            }
          }
          /* END FIRST PASS */
 
 
          /* CREATE FILE TO WRITE BINARY CODE TO */
          scanner = new Scanner(file);
+         vaw = new ValidateAndWrite(mem);
 
          /* START SECOND PASS - Generate object code */
          lineNum = -1;
@@ -56,8 +87,11 @@ public class Driver {
                command = command.replace(command.substring(0, command.indexOf(":") + 1),"");
             }
 
+            if(command.contains(".data")){
+               break;
+            }
 
-            if(command.length() > 0 && !command.contains(".data")){
+            if(command.length() > 0){
                lineNum++;
                System.out.println("Line " + lineNum + ": " + line);
                if (!vaw.CheckSyntax(command, lineNum)) {

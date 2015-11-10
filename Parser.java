@@ -12,25 +12,25 @@ public class Parser {
 	public int immediate; // 16-bits
 	// Parsed JType instruction: opcode, index
 	public int index; // 26-bits
-	
+
 	public Parser(Integer ins){
 		instruction = ins;
 		opcode = instruction >>> 26;
 		type = checkType(opcode);
 		parse(type);
 	}
-	
+
 	public Instruction.Type checkType(int opcode) {
 		Instruction.Type type;
 		if (opcode == 0x00)
 			type = Instruction.Type.RType;
 		else if (opcode == 0x2 || opcode == 0x3)
 			type = Instruction.Type.JType;
-		else 
+		else
 			type = Instruction.Type.IType;
 		return type;
 	}
-	
+
 	public void parse(Instruction.Type type) {
 		if (type == Instruction.Type.RType) {
 			rs = instruction & 0x3E00000;

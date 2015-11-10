@@ -15,7 +15,7 @@ public class Simulator {
       while(!s.equals("quit") && PC != lastPC){
          if(s.equals("s")){
             System.out.printf("Instruction: 0x%08X\n", Memory.getInstruction(currPC));
-            System.out.println("Last PC " + lastPC);
+            //System.out.println("Last PC " + lastPC);
             long start_time = System.currentTimeMillis();
 
             System.out.println("Time/instruction " + (System.currentTimeMillis() - start_time));
