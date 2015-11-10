@@ -1,5 +1,4 @@
 public class Parser {
-	public Integer instruction;
 	public Instruction.Type type;
 	// Parsed RType instruction: opcode, rs, rt, rd, shamt, funct
 	public int opcode; // 6-bits
@@ -13,11 +12,11 @@ public class Parser {
 	// Parsed JType instruction: opcode, index
 	public int index; // 26-bits
 
-	public Parser(Integer ins){
-		instruction = ins;
-		opcode = instruction >>> 26;
-		type = checkType(opcode);
-		parse(type);
+	public Parser(){
+	}
+
+	public int getOpCode(Integer ins) {
+		return ins >>> 26;
 	}
 
 	public Instruction.Type checkType(int opcode) {
@@ -31,21 +30,23 @@ public class Parser {
 		return type;
 	}
 
-	public void parse(Instruction.Type type) {
+	public void parse(Integer ins) {
+		opcode = getOpCode(ins);
+		type = checkType(opcode);
 		if (type == Instruction.Type.RType) {
-			rs = instruction & 0x3E00000;
-			rt = instruction & 0x1F0000;
-			rd = instruction & 0xF800;
-			shamt = instruction & 0x7C0;
-			funct = instruction & 0x3F;
+			rs = ins >>> 21 & 0x1F;
+			rt = ins >>> 16 & 0x1F;
+			rd = ins >>> 11 & 0x1F;
+			shamt = ins >>> 6 & 0x1F;
+			funct = ins & 0x3F;
 		}
 		else if (type == Instruction.Type.IType) {
-			rs = instruction & 0x03E00000;
-			rt = instruction & 0x001F0000;
-			immediate = instruction & 0x0000FFFF;
+			rs = ins >>> 21 & 0x1F;
+			rt = ins >>> 16 & 0x1F;
+			immediate = ins & 0x0000FFFF;
 		}
 		else {
-			index = instruction & 0x3FFFFFF;
+			index = ins & 0x3FFFFFF;
 		}
 	}
 }
