@@ -1,17 +1,29 @@
-main:    addi $t0, $zero, 5                     #Set t0 = 5
-         addi $t1, $zero, 0            #Set t1 = 0
-         addi $t2, $zero, 5
+# This is test program 1.  This program does nothing useful.
 
-ADD:     addi $t1, $t1, 1            #t1 += 5
-         addi $t0, $t0, -1             #Decrement $t0
-         bne $t0, $zero, ADD
+	add $s0, $0, $zero
+	addi $t0, $t0, 100#test comment
+	addi $a0, $a0,100
+test:	add $s0, $s0, $a0 # this is a comment
+	addi $a0, $a0, -1
+	bne $a0, $0, test	# this is another comment
+	addi $a0, $a0, 100
 
-         addi $v0, $zero, 4 #print t1
-         add $a0, $zero, $t1
-         syscall
-	 sw $a2, 4($t0)
-         addi $v0, $zero, 10 #terminate the program
-         syscall
+test1:
+    #test comment
 
-stored: .word 15
-hexstored: .word 0x31
+
+
+lw	$a0, 8($a1)
+	sw $a0,4($a1)
+  j test1
+jr	$ra
+	jal test1
+	slt $t0,$a0,$a1
+	beq $t0,$t1,test
+	sub $t3, $t1, $t1
+
+
+
+
+
+        sll $a0, $a1, 2

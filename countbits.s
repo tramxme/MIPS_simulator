@@ -15,7 +15,8 @@ main:  lw	$a0, test1	# Here is the test value
 
 # first, the "setup"
 
-countbits:	move	$v0, $zero	# Initialize counter in $v0
+countbits:
+	move	$v0, $t1	# Initialize counter in $v0
 
             ori	$t0, $zero, 1	# Initialize with a 32-bit mask with a '1' in the low bit of $t0
 
