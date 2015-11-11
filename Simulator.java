@@ -12,18 +12,20 @@ public class Simulator {
       String s = scan.next();
       int currPC = PC;
       Parser parser = new Parser();
+      Registers regs = new Registers();
+      int count = 0;
 
-      while(!s.equals("quit") && currPC < lastPC){
+      while(!s.equals("quit") && currPC <= lastPC){
          if(s.equals("s")){
-            System.out.printf("Instruction: 0x%08X\n", Memory.getInstruction(currPC));
-            //System.out.println("Last PC " + lastPC);
-            long start_time = System.currentTimeMillis();
+            //System.out.printf("Instruction: 0x%08X\n", Memory.getInstruction(currPC));
+            //System.out.printf("PC: %d\n", currPC);
+            	//System.out.println("Last PC " + lastPC);
+            long start_time = System.nanoTime();
             parser.parse(Memory.getInstruction(currPC));
+            
+            currPC = ALU.runCom(parser, regs, lastPC, currPC);
+            regs.printregs();
             /*
-             * ALU code goes here I guess...
-             * The below if/else is to check the parser's work
-             * Feel free to delete when ALU is implemented.
-             */
             if (parser.type == Instruction.Type.RType) {
                System.out.println("RType instruction:");
                System.out.printf("Opcode: 0x%X Rs: 0x%X Rt: 0x%X Rd: 0x%X shamt: 0x%X funct: 0x%X\n",
@@ -39,19 +41,23 @@ public class Simulator {
                System.out.printf("Opcode: 0x%X index: 0x%X\n",
                      parser.opcode, parser.index);
             }
-            System.out.println("Time/instruction " + (System.currentTimeMillis() - start_time));
+            */
+            System.out.println("Time/instruction (ns/instruction): " + (System.nanoTime() - start_time));
             currPC += 4;
+            count++;
          }
          else if(s.equals("r")){
-            long start_time = System.currentTimeMillis();
-            while (currPC != lastPC) {
-               System.out.printf("Instruction: 0x%08X\n", Memory.getInstruction(currPC));
+            long start_time = System.nanoTime();
+            while (currPC <= lastPC) {
+            
+               //System.out.printf("Instruction: 0x%08X\n", Memory.getInstruction(currPC));
+               //System.out.printf("PC: %d\n", currPC);
                parser.parse(Memory.getInstruction(currPC));
+               
+               currPC = ALU.runCom(parser, regs, lastPC, currPC);
+               //System.out.printf("PC: %d\n", currPC);
+               regs.printregs();
                /*
-                * ALU code goes here too I guess...
-                * The below if/else is to check the parser's work
-                * Feel free to delete when ALU is implemented.
-                */
                if (parser.type == Instruction.Type.RType) {
                   System.out.println("RType instruction:");
                   System.out.printf("Opcode: 0x%X Rs: 0x%X Rt: 0x%X Rd: 0x%X shamt: 0x%X funct: 0x%X\n",
@@ -67,16 +73,14 @@ public class Simulator {
                   System.out.printf("Opcode: 0x%X index: 0x%X\n",
                         parser.opcode, parser.index);
                }
+               */
                currPC += 4;
+               count++;
             }
-            System.out.println("Time/instruction " + (System.currentTimeMillis() - start_time));
+            System.out.println("Total instructions: " + count + "\nTime/instruction (ns/instruction) " + (System.nanoTime() - start_time)/count);
          }
          s = scan.next();
       }
       scan.close();
-   }
-
-   public int getNumberOfInstruction(){
-      return 0;
    }
 }

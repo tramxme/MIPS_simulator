@@ -26,8 +26,12 @@ public class Memory {
    }
 
    public void addData(Integer data, int lineNum) {
-      Instructions.put(dataAddress, data);
+      Data.put(dataAddress, data);
       dataAddress += 4;
+   }
+   
+   public static void addDataToMem(Integer data, int address) {
+	      Data.put(address, data);
    }
 
    public static int getCurrentPC(){
@@ -46,6 +50,10 @@ public class Memory {
    public static Integer getInstruction(int PC) {
       return Instructions.get(PC);
    }
+   
+   public static Integer getData(int address) {
+	      return Data.get(address);
+	   }
 
    public void setFirstData(int lineNum){
       firstData = lineNum;

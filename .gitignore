@@ -6,3 +6,8 @@
 /Label.class
 /Validate.class
 /ToBin.class
+/Memory.class
+/Parser.class
+/Registers.class
+/Simulator.class
+/ValidateAndWrite.class

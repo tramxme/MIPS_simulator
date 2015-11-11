@@ -93,7 +93,7 @@ public class Driver {
 
             if(command.length() > 0){
                lineNum++;
-               System.out.println("Line " + lineNum + ": " + line);
+               //System.out.println("Line " + lineNum + ": " + line);
                if (!vaw.CheckSyntax(command, lineNum)) {
                   System.out.println("Line " + lineNum + ": This instruction is not valid");
                   break;
@@ -105,7 +105,7 @@ public class Driver {
          vaw.closeFile(true);
 
          //Print out the label Table with their line number * 4
-         System.out.println(Label.labelTable);
+         //System.out.println(Label.labelTable);
 
          //Get the memory with all the instructions
          //Print the instructions in binary
@@ -115,10 +115,12 @@ public class Driver {
             System.out.printf("%d - instruction 0x%8X\n", j++, i);
             }
             */
+         /*
          System.out.println("Text Segment: " );
          for(Map.Entry<Integer, Integer> s : Memory.Instructions.entrySet()) {
             System.out.printf("Address 0x%8x - instruction 0x%8X\n", s.getKey(), s.getValue());
          }
+         */
 
          Simulator s = new Simulator();
          s.run();

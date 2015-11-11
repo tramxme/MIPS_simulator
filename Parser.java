@@ -11,11 +11,13 @@ public class Parser {
 	public int immediate; // 16-bits
 	// Parsed JType instruction: opcode, index
 	public int index; // 26-bits
+	public int word;
 
 	public Parser(){
 	}
 
 	public int getOpCode(Integer ins) {
+		word = ins;
 		return ins >>> 26;
 	}
 
