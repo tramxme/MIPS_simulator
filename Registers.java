@@ -1,10 +1,12 @@
 
 public class Registers {
-	public static Integer[] registers = new Integer[32];
+	private Integer[] registers = new Integer[32];
+	private Boolean[] flags = new Boolean[32];
 
 	public Registers() {
 		for (int i = 0; i < 32; i++) {
 			registers[i] = 0;
+			flags[i] = false;
 		}
 	}
 	public Integer read(Integer address) {
@@ -19,5 +21,19 @@ public class Registers {
 			System.out.printf("%8X " ,registers[i]);
 		}
 		System.out.println();
+	}
+	public Boolean checkFlag(Integer addr) {
+		return flags[addr];
+	}
+	public void setFlag(Integer addr) {
+		flags[addr] = true;
+	}
+	public void clearFlag(Integer addr) {
+		flags[addr] = false;
+	}
+	public void clearAllFlags() {
+		for (int i = 0; i < 32; i++) {
+			flags[i] = false;
+		}
 	}
 }
