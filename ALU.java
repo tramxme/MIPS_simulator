@@ -22,7 +22,7 @@ public class ALU {
 		type = cParser.type;
 		int currIns = cParser.currIns;
 		
-		if (currIns != 0){
+		if (currIns != 0 && (runFlag || startFlag)){
 			exe++;
 			if (type == Instruction.Type.RType) {
 				rs = regs.read(cParser.rs);
@@ -78,7 +78,7 @@ public class ALU {
 				rt = regs.read(cParser.rt);
 				immd = (cParser.immediate << 16) >> 16;
 				writeType = 1;
-				writeAddress = cParser.rd;
+				writeAddress = cParser.rt;
 				
 				switch (opCode){
 				case 0x08: writeVal = rs + immd;
@@ -87,21 +87,25 @@ public class ALU {
 					break;
 				case 0x0C: writeVal = rs & immd;
 					break;
-				case 0x04: if (rs == rt){
+				case 0x04:
+					writeType = 0;
+					writeAddress = 0;
+					writeVal = 0;
+					if (rs == rt){
 					
-						ret += immd << 2;
-						writeType = 0;
-						writeAddress = 0;
-						writeVal = 0;
+						ret += (immd << 2) - 4;
+						
 						cParser.flush(runFlag, startFlag);
 						regs.clearAllFlags();
 					}
 					break;
-				case 0x05: if (rs != rt) {
-						ret += immd << 2;
-						writeType = 0;
-						writeAddress = 0;
-						writeVal = 0;
+				case 0x05: 
+					writeType = 0;
+					writeAddress = 0;
+					writeVal = 0;
+					if (rs != rt) {
+						ret += (immd << 2) - 4;
+						
 						cParser.flush(runFlag, startFlag);
 						regs.clearAllFlags();
 					}
@@ -157,9 +161,12 @@ public class ALU {
 	public static void writeBack (Registers regs, Boolean runFlag, Boolean startFlag, Parser cParser) {
 		if (writeType == 1) {
 			writes++;
+			//regs.printregs();
 			startFlag = false;
 			regs.write(writeAddress, writeVal);
 			regs.clearFlag(writeAddress);
+			//regs.printregs();
+			
 			if (!runFlag) {
 				if (cParser.type == Instruction.Type.RType){
 					if (!(regs.checkFlag(cParser.rs)) && !(regs.checkFlag(cParser.rt))) {
